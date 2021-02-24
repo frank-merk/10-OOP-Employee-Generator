@@ -39,52 +39,25 @@ const employees = [];
 const introQs = [
     {
       type: 'input',
-      name: 'project',
+      name: 'name',
       message: 'Greetings, Project Manager! Enter your name?'
     },
     {
       type: 'input',
-      name: 'description',
-      message: 'Briefly describe what your project does.'
+      name: 'id',
+      message: 'What is your employee ID?'
     },
     {
       type: 'input',
-      name: 'installation',
-      message: 'What installations are required for your project?'
+      name: 'email',
+      message: 'What is your email address?'
     },
     {
       type: 'input',
-      name: 'usage',
-      message: 'How does one use your project?'
-    },
-    {
-      type: 'input',
-      name: 'contributors',
-      message: 'Please list other contributors to this project if there are any.'
-    },
-    {
-      type: 'input',
-      name: 'tests',
-      message: 'How does one run tests on this project?'
-    },
-    {
-        type: 'list',
-        name: 'license',
-        message: 'What type of license does this project have?',
-        choices: ['Apache 2.0', 'GNU', 'MIT', 'Creative Commons', 'None']
-      },
-      {
-        type: 'input',
-        name: 'github',
-        message: 'What is your github username?'
-      },
-      {
-        type: 'input',
-        name: 'email',
-        message: 'What is your email address?'
-      },
-  ];
-
+      name: 'officeNumber',
+      message: 'What is your office number?'
+    }
+];
 // TODO: Create a function to write README file
   function writeToFile(fileName, data) {
     fs.writeFile(fileName, data, (err) =>
