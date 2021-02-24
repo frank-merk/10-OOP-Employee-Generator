@@ -80,4 +80,12 @@ function init(prompts) {
             writeToFile("newREADME.md", newREADME);
         })
 }
-init(questions);
+
+// The user story is for the manager, so we assume that they are the first user entering this information, and prompt them from there.
+const init = (introduction) => {
+    inquirer.prompt(introduction).then((respone) => {
+        const manager = new Manager(response.name, response.id, response.email, response.role, response.officeNumber);
+        employees.push(manager);
+    });
+}
+init(introduction);
