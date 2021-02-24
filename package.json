@@ -1,5 +1,5 @@
 {
-  "name": "unit10hw",
+  "name": "employee-generator",
   "version": "1.0.0",
   "description": "OOP and testing for week 10 homework",
   "main": "app.js",
@@ -14,8 +14,8 @@
     "type": "git",
     "url": "git+https://github.com/stevetrilogy/unit10hw.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "frank merchlewitz",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/stevetrilogy/unit10hw/issues"
   },
