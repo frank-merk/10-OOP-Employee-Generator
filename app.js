@@ -148,7 +148,6 @@ const roleQ = [{
     message: 'Would you like to add another employee?'
 }];
 
-let roleQ.addMore = false;
 const newRole = inquirer.prompt(roleQ).then((data) => {
     if (data.addMore === true) {
         newEmployee();
