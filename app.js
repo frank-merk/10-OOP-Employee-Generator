@@ -59,32 +59,66 @@ const introQs = [
     }
 ];
 
-const data = render(employees);
-fs.writeFile(outputPath, data, (err) =>
-        err ? console.log(err) : console.log('Success! Team Page Written')
-    );
+const newEmployee = () => {
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'role',
+            choices: ['Intern', 'Engineer', 'Manager'],
+            message: "What is this employee's role?"
+        }
+    ]).then((respone) => {
+        let employeeRole = response.role;
+        switch(employeeRole){
+            case "Manager"
+        }
+    }
+)}
 
-// Function call to initialize app
-
-// init function with one argument which will be our questions array
-function init(prompts) {
-  // tell inquirer to run that questions array into the terminal
-    inquirer.prompt(prompts)
-        .then((answers) => {
-    
-        // Take what we are storing in newReadMe and write it. If there's an error, return the error, if not alert the console the file was written successfully
-
-            const newREADME = markdown(answers);
-            // function we made earlier
-            writeToFile("newREADME.md", newREADME);
-        })
-}
+const internQs = [
+    {
+      type: 'input',
+      name: 'name',
+      message: 'Greetings, Project Manager! Enter your name?'
+    },
+    {
+      type: 'input',
+      name: 'id',
+      message: 'What is your employee ID?'
+    },
+    {
+      type: 'input',
+      name: 'email',
+      message: 'What is your email address?'
+    },
+    {
+      type: 'input',
+      name: 'officeNumber',
+      message: 'What is your office number?'
+    }
+];
 
 // The user story is for the manager, so we assume that they are the first user entering this information, and prompt them from there.
 const init = (introduction) => {
     inquirer.prompt(introduction).then((respone) => {
         const manager = new Manager(response.name, response.id, response.email, response.role, response.officeNumber);
         employees.push(manager);
+        inquirer.prompt([
+            type: 'confirm',
+            name: 'addMore',
+            message: 'Would you like to add another employee?'
+        ])then.((nextResponse) => {
+            if (nextResponse.confirm === true;) {
+                newEmployee();
+            } else {
+                // Take the employee data and use the render html function to write it to the file to the specified output path
+                const data = render(employees);
+                fs.writeFile(outputPath, data, (err) =>
+                        err ? console.log(err) : console.log('Success! Team Page Written')
+                    );
+            }
+        })
     });
 }
+// start the prompts
 init(introQs);
