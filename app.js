@@ -58,12 +58,11 @@ const introQs = [
       message: 'What is your office number?'
     }
 ];
-// TODO: Create a function to write README file
-  function writeToFile(fileName, data) {
-    fs.writeFile(fileName, data, (err) =>
-        err ? console.log(err) : console.log('Success! ReadMe Written')
+
+const data = render(employees);
+fs.writeFile(outputPath, data, (err) =>
+        err ? console.log(err) : console.log('Success! Team Page Written')
     );
-}
 
 // Function call to initialize app
 
@@ -88,4 +87,4 @@ const init = (introduction) => {
         employees.push(manager);
     });
 }
-init(introduction);
+init(introQs);
