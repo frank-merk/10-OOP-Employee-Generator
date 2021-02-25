@@ -72,25 +72,20 @@ const newEmployee = () => {
         switch(employeeRole){
             case "Intern":
                 inquirer.prompt(internQs).then((nextResponse) => {
-                    const intern = new Intern(response.name, response.id, response.email, response.role, response.school);
+                    const intern = new Intern(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.school);
                     employees.push(intern);
                 });
                 break;
             case "Engineer":
                 inquirer.prompt(engineerQs).then((nextResponse) => {
-                    const engineer = new Engineer(response.name, response.id, response.email, response.role, response.github);
+                    const engineer = new Engineer(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.github);
                     employees.push(engineer);
                 });
                 break;
             default:
-                inquirer.prompt([
-                    {
-                        type: 'input',
-                        name: 'officeNumber',
-                        message: 'What is your office number?'
-                  }
+                inquirer.prompt([introQs
                 ]).then((nextResponse) => {
-                    const manager = new Manager(response.name, response.id, response.email, response.role, response.officeNumber);
+                    const manager = new Manager(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.officeNumber);
                     employees.push(manager);
                 });
                 break;
@@ -146,15 +141,17 @@ const engineerQs = [
 
 // The user story is for the manager, so we assume that they are the first user entering this information, and prompt them from there.
 const init = (introduction) => {
-    inquirer.prompt(introduction).then((respone) => {
+    inquirer.prompt(introduction).then((response) => {
         const manager = new Manager(response.name, response.id, response.email, response.role, response.officeNumber);
         employees.push(manager);
         inquirer.prompt([
+        {
             type: 'confirm',
             name: 'addMore',
             message: 'Would you like to add another employee?'
-        ])then.((nextResponse) => {
-            if (nextResponse.addMore === true;) {
+        }
+        ]).then((nextResponse) => {
+            if (nextResponse.addMore === true) {
                 newEmployee();
             } else {
                 // Take the employee data and use the render html function to write it to the file to the specified output path
