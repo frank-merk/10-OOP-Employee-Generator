@@ -70,7 +70,30 @@ const newEmployee = () => {
     ]).then((respone) => {
         let employeeRole = response.role;
         switch(employeeRole){
-            case "Manager"
+            case "Intern":
+                inquirer.prompt(internQs).then((nextResponse) => {
+                    const intern = new Intern(response.name, response.id, response.email, response.role, response.school);
+                    employees.push(intern);
+                });
+                break;
+            case "Engineer":
+                inquirer.prompt(engineerQs).then((nextResponse) => {
+                    const engineer = new Engineer(response.name, response.id, response.email, response.role, response.github);
+                    employees.push(engineer);
+                });
+                break;
+            default:
+                inquirer.prompt([
+                    {
+                        type: 'input',
+                        name: 'officeNumber',
+                        message: 'What is your office number?'
+                  }
+                ]).then((nextResponse) => {
+                    const manager = new Manager(response.name, response.id, response.email, response.role, response.officeNumber);
+                    employees.push(manager);
+                });
+                break;
         }
     }
 )}
@@ -79,22 +102,45 @@ const internQs = [
     {
       type: 'input',
       name: 'name',
-      message: 'Greetings, Project Manager! Enter your name?'
+      message: 'Enter employee name.'
     },
     {
       type: 'input',
       name: 'id',
-      message: 'What is your employee ID?'
+      message: 'Enter employee ID.'
     },
     {
       type: 'input',
       name: 'email',
-      message: 'What is your email address?'
+      message: 'Enter employee email address.'
     },
     {
       type: 'input',
-      name: 'officeNumber',
-      message: 'What is your office number?'
+      name: 'school',
+      message: 'Where does this intern go to school?'
+    }
+];
+
+const engineerQs = [
+    {
+      type: 'input',
+      name: 'name',
+      message: 'Enter employee name.'
+    },
+    {
+      type: 'input',
+      name: 'id',
+      message: 'Enter employee ID.'
+    },
+    {
+      type: 'input',
+      name: 'email',
+      message: 'Enter employee email address.'
+    },
+    {
+      type: 'input',
+      name: 'school',
+      message: 'Enter the github username for this employee.'
     }
 ];
 
@@ -108,7 +154,7 @@ const init = (introduction) => {
             name: 'addMore',
             message: 'Would you like to add another employee?'
         ])then.((nextResponse) => {
-            if (nextResponse.confirm === true;) {
+            if (nextResponse.addMore === true;) {
                 newEmployee();
             } else {
                 // Take the employee data and use the render html function to write it to the file to the specified output path
