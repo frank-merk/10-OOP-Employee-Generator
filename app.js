@@ -60,40 +60,23 @@ const introQs = [
 ];
 
 const newEmployee = () => {
-    inquirer.prompt([
-        {
-            type: 'list',
-            name: 'role',
-            choices: ['Intern', 'Engineer', 'Manager'],
-            message: "What is this employee's role?"
+    inquirer.prompt([{
+        type: 'confirm',
+        name: 'addMore',
+        message: 'Would you like to add another employee?'
+    }]).then((function (response) {
+        if (response.addMore === true) {
+            newRole();
+        } else {
+            // Take the employee data and use the render html function to write it to the file to the specified output path
+            const renderedHTML = render(employees);
+            fs.writeFile(outputPath, renderedHTML, (err) =>
+                    err ? console.log(err) : console.log('Success! Team Page Written')
+                );
         }
-    ]).then((response) => {
-        let employeeRole = response.role;
-        switch(employeeRole){
-            case "Intern":
-                inquirer.prompt(internQs).then((nextResponse) => {
-                    const intern = new Intern(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.school);
-                    employees.push(intern);
-                });
-                newRole();
-                break;
-            case "Engineer":
-                inquirer.prompt(engineerQs).then((nextResponse) => {
-                    const engineer = new Engineer(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.github);
-                    employees.push(engineer);
-                });
-                newRole();
-                break;
-            default:
-                inquirer.prompt([introQs
-                ]).then((nextResponse) => {
-                    const manager = new Manager(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.officeNumber);
-                    employees.push(manager);
-                });
-                newRole();
-                break;
-        }
-    }
+    
+        
+    })
 )}
 
 const internQs = [
@@ -142,23 +125,47 @@ const engineerQs = [
     }
 ];
 
-const roleQ = [{
-    type: 'confirm',
-    name: 'addMore',
-    message: 'Would you like to add another employee?'
+const roleQ = [
+{
+    type: 'list',
+    name: 'role',
+    choices: ['Intern', 'Engineer', 'Manager'],
+    message: "What is this employee's role?"
 }];
 
-const newRole = inquirer.prompt(roleQ).then((data) => {
-    if (data.addMore === true) {
-        newEmployee();
-    } else {
-        // Take the employee data and use the render html function to write it to the file to the specified output path
-        const renderedHTML = render(employees);
-        fs.writeFile(outputPath, renderedHTML, (err) =>
-                err ? console.log(err) : console.log('Success! Team Page Written')
-            );
-    }
+function newRole() { inquirer.prompt(roleQ).then((data) => {
+        let employeeRole = data.role
+        switch(employeeRole){
+            case "Intern":
+                inquirer.prompt(internQs).then((nextResponse) => {
+                    const intern = new Intern(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.school);
+                    employees.push(intern);
+                    newEmployee();
+                });
+                
+                break;
+            case "Engineer":
+                inquirer.prompt(engineerQs).then((nextResponse) => {
+                    const engineer = new Engineer(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.github);
+                    employees.push(engineer);
+                    newEmployee();
+                });
+                
+                break;
+            case "Manager":
+                inquirer.prompt(introQs
+                ).then((nextResponse) => {
+                    const manager = new Manager(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.officeNumber);
+                    employees.push(manager);
+                    newEmployee();
+                });
+                
+                break;
+        }
+        
+    
 })
+}
     
 
 // The user story is for the manager, so we assume that they are the first user entering this information, and prompt them from there.
@@ -168,9 +175,10 @@ const init = (introduction) => {
     inquirer.prompt(introduction).then((response) => {
         const manager = new Manager(response.name, response.id, response.email, response.role, response.officeNumber);
         employees.push(manager);
-        roleSwitch = true;
-        newRole();
+        newEmployee();
     });
+
 }
 // start the prompts
 init(introQs);
+
