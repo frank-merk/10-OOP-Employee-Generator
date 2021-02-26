@@ -10,7 +10,6 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
@@ -34,8 +33,10 @@ const render = require("./lib/htmlRenderer");
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work! ```
 
+// declare a place to push new employees
 const employees = [];
 
+// init/manager questions
 const introQs = [
     {
       type: 'input',
@@ -59,26 +60,7 @@ const introQs = [
     }
 ];
 
-const newEmployee = () => {
-    inquirer.prompt([{
-        type: 'confirm',
-        name: 'addMore',
-        message: 'Would you like to add another employee?'
-    }]).then((function (response) {
-        if (response.addMore === true) {
-            newRole();
-        } else {
-            // Take the employee data and use the render html function to write it to the file to the specified output path
-            const renderedHTML = render(employees);
-            fs.writeFile(outputPath, renderedHTML, (err) =>
-                    err ? console.log(err) : console.log('Success! Team Page Written')
-                );
-        }
-    
-        
-    })
-)}
-
+// intern specific Qs
 const internQs = [
     {
       type: 'input',
@@ -102,6 +84,7 @@ const internQs = [
     }
 ];
 
+// Engineer specific Qs
 const engineerQs = [
     {
       type: 'input',
@@ -133,51 +116,71 @@ const roleQ = [
     message: "What is this employee's role?"
 }];
 
+// function to ask questions based on a specific role
 function newRole() { inquirer.prompt(roleQ).then((data) => {
-        let employeeRole = data.role
-        switch(employeeRole){
-            case "Intern":
-                inquirer.prompt(internQs).then((nextResponse) => {
-                    const intern = new Intern(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.school);
-                    employees.push(intern);
-                    newEmployee();
-                });
-                
-                break;
-            case "Engineer":
-                inquirer.prompt(engineerQs).then((nextResponse) => {
-                    const engineer = new Engineer(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.github);
-                    employees.push(engineer);
-                    newEmployee();
-                });
-                
-                break;
-            case "Manager":
-                inquirer.prompt(introQs
-                ).then((nextResponse) => {
-                    const manager = new Manager(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.officeNumber);
-                    employees.push(manager);
-                    newEmployee();
-                });
-                
-                break;
+    let employeeRole = data.role
+    switch(employeeRole){
+        case "Intern":
+            inquirer.prompt(internQs).then((nextResponse) => {
+                // create new intern object
+                const intern = new Intern(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.school);
+                // push to the employees array
+                employees.push(intern);
+                // run new employee to check if there are any more employees to add
+                newEmployee();
+            });
+            
+            break;
+        case "Engineer":
+            inquirer.prompt(engineerQs).then((nextResponse) => {
+                const engineer = new Engineer(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.github);
+                employees.push(engineer);
+                newEmployee();
+            });
+            
+            break;
+        case "Manager":
+            inquirer.prompt(introQs
+            ).then((nextResponse) => {
+                const manager = new Manager(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.officeNumber);
+                employees.push(manager);
+                newEmployee();
+            });
+            
+            break;
         }
-        
-    
-})
+    });
 }
+
+// function for new employees. filters them based on their response to the first question
+const newEmployee = () => {
+    inquirer.prompt([{
+        type: 'confirm',
+        name: 'addMore',
+        message: 'Would you like to add another employee?'
+    }]).then((function (response) {
+        if (response.addMore === true) {
+            // if they want to add more employees, run the qs filtered by role
+            newRole();
+        } else {
+            // if a user says no, take the employee data and use the render html function to write it to the file to the specified output path
+            const renderedHTML = render(employees);
+            fs.writeFile(outputPath, renderedHTML, (err) =>
+                    err ? console.log(err) : console.log('Success! Team Page Written')
+                );
+        }
     
+        
+    })
+)}
 
 // The user story is for the manager, so we assume that they are the first user entering this information, and prompt them from there.
-
-
 const init = (introduction) => {
     inquirer.prompt(introduction).then((response) => {
         const manager = new Manager(response.name, response.id, response.email, response.role, response.officeNumber);
         employees.push(manager);
         newEmployee();
     });
-
 }
 // start the prompts
 init(introQs);
