@@ -103,7 +103,7 @@ const engineerQs = [
     },
     {
       type: 'input',
-      name: 'school',
+      name: 'github',
       message: 'Enter the github username for this employee.'
     }
 ];
@@ -123,7 +123,7 @@ function newRole() { inquirer.prompt(roleQ).then((data) => {
         case "Intern":
             inquirer.prompt(internQs).then((nextResponse) => {
                 // create new intern object
-                const intern = new Intern(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.school);
+                const intern = new Intern(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.school);
                 // push to the employees array
                 employees.push(intern);
                 // run new employee to check if there are any more employees to add
@@ -133,7 +133,7 @@ function newRole() { inquirer.prompt(roleQ).then((data) => {
             break;
         case "Engineer":
             inquirer.prompt(engineerQs).then((nextResponse) => {
-                const engineer = new Engineer(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.github);
+                const engineer = new Engineer(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.github);
                 employees.push(engineer);
                 newEmployee();
             });
@@ -142,7 +142,7 @@ function newRole() { inquirer.prompt(roleQ).then((data) => {
         case "Manager":
             inquirer.prompt(introQs
             ).then((nextResponse) => {
-                const manager = new Manager(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.role, nextResponse.officeNumber);
+                const manager = new Manager(nextResponse.name, nextResponse.id, nextResponse.email, nextResponse.officeNumber);
                 employees.push(manager);
                 newEmployee();
             });
@@ -177,7 +177,7 @@ const newEmployee = () => {
 // The user story is for the manager, so we assume that they are the first user entering this information, and prompt them from there.
 const init = (introduction) => {
     inquirer.prompt(introduction).then((response) => {
-        const manager = new Manager(response.name, response.id, response.email, response.role, response.officeNumber);
+        const manager = new Manager(response.name, response.id, response.email, response.officeNumber);
         employees.push(manager);
         newEmployee();
     });
